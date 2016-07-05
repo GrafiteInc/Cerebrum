@@ -65,7 +65,7 @@ class SomethingRepository
 ```
 
 Regarding `$this->forgetful` if you do not set it, then Remember will parse your class for all methods and clear any related caches it can find.
-You will also see that we can use the forget to discard object. The remember on the other hand, will collect a value and store it on its own key base.
+You will also see that we can use the forget to discard object. The remember function on the other hand, will collect a value and store it in the cache.
 
 ## License
 Remember is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
