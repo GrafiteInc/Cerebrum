@@ -1,0 +1,24 @@
+{
+    "name": "yab/remember",
+    "description": "The easiest way to add caching to any part of your Laravel/Lumen app.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Matt Lantz",
+            "email": "matt@yabhq.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "illuminate/support": "^5.2",
+        "illuminate/container": "^5.2|^5.1",
+        "mockery/mockery": "^0.9.4",
+        "nesbot/carbon": "^1.21"
+    },
+    "autoload": {
+        "psr-4": {
+            "Yab\\Remember\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
