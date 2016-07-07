@@ -48,7 +48,14 @@ class SomethingRepository
     public function __construct()
     {
         $this->memory(15);
-        $this->forgetful([]); // list classes that may need to clear on an update
+        $this->forgetful([
+            'all'
+        ]);
+    }
+
+    public function all()
+    {
+        return $this->remember($this->model->all());
     }
 
     public function findById($id)
@@ -64,7 +71,7 @@ class SomethingRepository
 }
 ```
 
-Regarding `$this->forgetful` if you do not set it, then Remember will parse your class for all methods and clear any related caches it can find.
+Regarding `$this->forgetful` if you do not set it, then Remember will parse your class for all functions and clear any related caches it can find.
 You will also see that we can use the forget to discard object. The remember function on the other hand, will collect a value and store it in the cache.
 
 ## License
