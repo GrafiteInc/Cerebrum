@@ -84,8 +84,10 @@ class TaskService
 }
 ```
 
-Regarding `$this->forgetful` if you do not set it, then Memory will parse your class for all functions and clear any related caches it can find.
-You will also see that we can use the forget to discard object. The remember function on the other hand, will collect a value and store it in the cache.
+Regarding `$this->forgetful` if you do not set it, then `Memory` will parse your class for all functions and clear any related caches it can find.
+
+The `remember` function on the other hand, will collect a value and store it in the cache,
+returning the cached version. The `forget` with a parameter will find caches with similar values and clear your caches.
 
 ## License
 Memory is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
