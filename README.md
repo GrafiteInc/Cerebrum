@@ -1,8 +1,11 @@
-# Remember
+# Cerebrum
 
-**Remember** - The easiest way to add caching to any part of your Laravel/Lumen app.
+**Cerebrum** - The easiest way to add some mental magic to any part of your Laravel/Lumen app.
 
-Remember is a trait which can be added to any class in your app to enable caching.
+Memory provides magic caching abilities.
+Linguistics provides a means of simple NLP.
+Auditory provides some basic audio processing.
+Occipital provides basic visual processing.
 
 **Author(s):**
 * [Matt Lantz](https://github.com/mlantz) ([@mattylantz](http://twitter.com/mattylantz), matt at yabhq dot com)
@@ -19,9 +22,9 @@ Start a new Laravel project:
 composer create-project laravel/lumen your-project-name
 ```
 
-Then run the following to add Remember
+Then run the following to add Cerebrum
 ```php
-composer require yab/remember
+composer require yab/cerebrum
 ```
 
 ### Providers
@@ -33,21 +36,31 @@ Add this to the `bootsrap/app.php` in the service providers array:
 Add this to the `config/app.php` in the service providers array:
 
 ```php
-Yab\Remember\RememberProvider::class
+Yab\Cerebrum\CerebrumProvider::class
 ```
 
-## How To
+## Milestones
 
-A general way would be to implement this on a class that may require some caching, this could be a repository or service class. You add the trait to the class
+### 1.0
+- [x] Memory
+- [ ] Linguistics
+- [ ] Auditory
+- [ ] Occipital
+
+## Memory Example
 
 ```php
-use Yab\Remember\Remember;
+use Yab\Cerebrum\Memory;
 
-class SomethingRepository
+class TaskService
 {
-    public function __construct()
+    use Memory;
+
+    public function __construct(TaskRespository $taskRepository)
     {
-        $this->memory(15);
+        $this->repository = $taskRepository;
+        // provided by Memory
+        $this->memoryDuration(15);
         $this->forgetful([
             'all'
         ]);
@@ -55,27 +68,27 @@ class SomethingRepository
 
     public function all()
     {
-        return $this->remember($this->model->all());
+        return $this->remember($this->repository->all());
     }
 
     public function findById($id)
     {
-        return $this->remember($this->model->findById($id));
+        return $this->remember($this->repository->findById($id));
     }
 
     public function update($id, $data)
     {
         $this->forget($id);
-        return $this->model->update($id, $data);
+        return $this->repository->update($id, $data);
     }
 }
 ```
 
-Regarding `$this->forgetful` if you do not set it, then Remember will parse your class for all functions and clear any related caches it can find.
+Regarding `$this->forgetful` if you do not set it, then Memory will parse your class for all functions and clear any related caches it can find.
 You will also see that we can use the forget to discard object. The remember function on the other hand, will collect a value and store it in the cache.
 
 ## License
-Remember is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+Memory is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
 ### Bug Reporting and Feature Requests
 Please add as many details as possible regarding submission of issues and feature requests

@@ -1,10 +1,10 @@
 <?php
 
-namespace Yab\Remember;
+namespace Yab\Cerebrum;
 
 use Illuminate\Support\ServiceProvider;
 
-class RememberProvider extends ServiceProvider
+class CerebrumProvider extends ServiceProvider
 {
     /**
      * Register the service provider.

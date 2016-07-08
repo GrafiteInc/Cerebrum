@@ -1,18 +1,18 @@
 <?php
 
-namespace Yab\Remember;
+namespace Yab\Cerebrum;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 
-trait Remember
+trait Memory
 {
     /**
      * Memory duration
      *
      * @var integer
      */
-    protected $memory = 15;
+    protected $memoryDuration = 15;
 
     /**
      * Methods that can be forgetten
@@ -83,7 +83,7 @@ trait Remember
         if (Cache::has($key)) {
             $value = Cache::get($key);
         } else {
-            $expiresAt = Carbon::now()->addMinutes($this->memory);
+            $expiresAt = Carbon::now()->addMinutes($this->memoryDuration);
             Cache::put($key, $value, $expiresAt);
         }
 

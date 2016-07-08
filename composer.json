@@ -1,6 +1,6 @@
 {
-    "name": "yab/remember",
-    "description": "The easiest way to add caching to any part of your Laravel/Lumen app.",
+    "name": "yab/cerebrum",
+    "description": "The easiest way to add some mental magic to any part of your Laravel/Lumen app.",
     "license": "MIT",
     "authors": [
         {
@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Yab\\Remember\\": "src/"
+            "Yab\\Cerebrum\\": "src/"
         }
     },
     "minimum-stability": "stable"

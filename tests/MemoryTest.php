@@ -2,18 +2,18 @@
 
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Facade;
-use Yab\Remember\Remember;
+use Yab\Cerebrum\Memory;
 
 /**
 * Test Class
 */
 class TestClass
 {
-    use Remember;
+    use Memory;
 
     public function __construct()
     {
-        $this->memory = 60;
+        $this->memoryDuration = 60;
         $this->forgetful = [
             'all',
             'findById'
@@ -41,7 +41,7 @@ class TestClass
     }
 }
 
-class RememberTest extends PHPUnit_Framework_TestCase
+class MemoryTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
@@ -69,7 +69,7 @@ class RememberTest extends PHPUnit_Framework_TestCase
         $this->testClass = new TestClass();
     }
 
-    public function testRemember()
+    public function testMemory()
     {
         $test = $this->testClass->remember(['test']);
         $this->assertEquals($test, ['test']);
