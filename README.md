@@ -2,10 +2,10 @@
 
 **Cerebrum** - The easiest way to add some mental magic to any part of your Laravel/Lumen app.
 
-Memory provides magic caching abilities.
-Linguistics provides a means of simple NLP.
-Auditory provides some basic audio processing.
-Occipital provides basic visual processing.
+* Memory provides magic caching abilities.
+* Linguistics provides a means of simple NLP.
+* Auditory provides some basic audio processing.
+* Occipital provides basic visual processing.
 
 **Author(s):**
 * [Matt Lantz](https://github.com/mlantz) ([@mattylantz](http://twitter.com/mattylantz), matt at yabhq dot com)
