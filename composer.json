@@ -13,7 +13,8 @@
         "illuminate/support": "^5.2",
         "illuminate/container": "^5.2|^5.1",
         "mockery/mockery": "^0.9.4",
-        "nesbot/carbon": "^1.21"
+        "nesbot/carbon": "^1.21",
+        "yooper/php-text-analysis": "^1.0"
     },
     "autoload": {
         "psr-4": {
