@@ -2,132 +2,231 @@
 
 namespace Yab\Cerebrum;
 
+use TextAnalysis\Analysis\FreqDist;
+use TextAnalysis\Filters\EnglishStopWordsFilter;
+use TextAnalysis\Stemmers\LancasterStemmer;
+use TextAnalysis\Tokenizers\GeneralTokenizer;
 use TextAnalysis\Tokenizers\SentenceTokenizer;
 use TextAnalysis\Tokenizers\WhitespaceTokenizer;
-use TextAnalysis\Tokenizers\PennTreeBankTokenizer;
-use TextAnalysis\Stemmers\LancasterStemmer;
 
 trait Linguistics
 {
-    public function getKeywords($string)
+    protected $inquiryWords = [
+        'who',
+        'what',
+        'when',
+        'where',
+        'why',
+        'how',
+        'can',
+        'could',
+        'would',
+        'should',
+        'is',
+        'might',
+    ];
+
+    protected $confirmationWords = [
+        'confirm',
+        'can',
+        'agree',
+        'yes',
+        'continue',
+        'like',
+        'want',
+    ];
+
+    protected $denialWords = [
+        'stop',
+        'no',
+        'end',
+        'can\'t',
+        'can\'t want',
+        'can\'t like',
+        'can\'t continue',
+        'can\'t confirm',
+        'can\'t agree',
+        'don\'t',
+        'don\'t want',
+        'don\'t like',
+        'don\'t continue',
+        'don\'t confirm',
+        'don\'t agree',
+        'won\'t',
+        'won\'t want',
+        'won\'t like',
+        'won\'t continue',
+        'won\'t confirm',
+        'won\'t agree',
+        'not',
+    ];
+
+    public function getWords($string, $minLength = null)
     {
-        $minWordLen = 3;
-        $minWordOccurrences = 2;
-        $maxWords = 8;
-        $restrict = false;
+        $tokenizer = new WhitespaceTokenizer();
+        $words = $tokenizer->tokenize($string);
 
-        $str = str_replace(array("?","!",";","(",")",":","[","]"), " ", $string);
-        $str = str_replace(array("\n","\r","  "), " ", $str);
-        strtolower($str);
-
-        $str = preg_replace('/[^\p{L}0-9 ]/', ' ', $str);
-        $str = trim(preg_replace('/\s+/', ' ', $str));
-
-        $words = explode(' ', $str);
-
-        /*
-        Only compare to common words if $restrict is set to false
-        Tags are returned based on any word in text
-        If we don't restrict tag usage, we'll remove common words from array
-        */
-
-        if ($restrict == false) {
-            /* Full list of common words in the downloadable code */
-            $commonWords = array('a','able','about','above','abroad','according');
-            $words = array_udiff($words, $commonWords,'strcasecmp');
+        if (! is_null($minLength)) {
+            foreach ($words as $key => $word) {
+                if (strlen($word) <= $minLength) {
+                    unset($words[$key]);
+                }
+            }
         }
 
-        /* Restrict Keywords based on values in the $allowedWords array */
-        /* Use if you want to limit available tags */
-        if ($restrict == true) {
-            $allowedWords =  array('engine','boeing','electrical','pneumatic','ice');
-            $words = array_uintersect($words, $allowedWords,'strcasecmp');
-        }
-
-        $keywords = array();
-
-        while(($c_word = array_shift($words)) !== null) {
-        if(strlen($c_word) < $minWordLen) continue;
-
-        $c_word = strtolower($c_word);
-        if(array_key_exists($c_word, $keywords)) $keywords[$c_word][1]++;
-        else $keywords[$c_word] = array($c_word, 1);
-        }
-
-        usort($keywords, [$this, 'keywordCountSort']);
-        $final_keywords = array();
-
-        foreach($keywords as $keyword_det) {
-            if($keyword_det[1] < $minWordOccurrences) break;
-            array_push($final_keywords, $keyword_det[0]);
-        }
-
-        $final_keywords = array_slice($final_keywords, 0, $maxWords);
-
-        return $final_keywords;
-
-// /* Usage */
-// $str = "Many systems that traditionally had a reliance on the pneumatic system have been transitioned to the electrical architecture. They include engine start, API start, wing ice protection, hydraulic pumps and cabin pressurisation. The only remaining bleed system on the 787 is the anti-ice system for the engine inlets. In fact, Boeing claims that the move to electrical systems has reduced the load on engines (from pneumatic hungry systems) by up to 35 percent (not unlike today's electrically power flight simulators that use 20% of the electricity consumed by the older hydraulically actuated flight sims).";
-// echo extract_keywords($str, $minWordLen = 3, $minWordOccurrences = 2, $asArray = false, $maxWords = 8, $restrict = false)
+        return array_values($words);
     }
 
-    private function keywordCountSort($first, $sec)
+    public function getKeywords($string, $amount = 10)
     {
-        return $sec[1] - $first[1];
+        $words = $this->getWords($string);
+        $analysis = new FreqDist($words);
+
+        $keywords = $analysis->getKeyValuesByFrequency();
+
+        return array_slice($keywords, 0, $amount);
     }
 
     public function getHashtags($string)
     {
-        return $string;
+        preg_match_all("/(#\w+)/", $string, $matches);
+        return $matches[0];
     }
 
     public function getSentences($string)
     {
-
+        $tokenizer = new SentenceTokenizer();
+        return $tokenizer->tokenize($string);
     }
 
-    public function hasConfirmed($string)
+    public function getUniqueWords($string)
     {
+        $words = $this->getWords($string);
+        $analysis = new FreqDist($words);
+        $words = $analysis->getKeyValuesByFrequency();
 
+        return array_unique(array_keys($words));
     }
 
-    public function getWords($string)
+    public function getWordsByComplexity($string)
     {
+        $words = $this->getWords($string);
+        $analysis = new FreqDist($words);
+        $sortedWords = $analysis->getKeyValuesByFrequency();
+        $wordsByFrequency = array_unique(array_keys($sortedWords));
 
+        usort($wordsByFrequency, function ($a, $b) {
+            return strlen($b) - strlen($a);
+        });
+
+        return $wordsByFrequency;
     }
 
-    public function isQuestion($string)
+    public function getStopWords($string)
     {
+        $words = $this->getWords($string);
+        $filter = new EnglishStopWordsFilter();
+        $stopWords = [];
 
-    }
+        foreach ($words as $word) {
+            if ($filter->transform($word)) {
+                $stopWords[] = $word;
+            }
+        }
 
-    public function isCompleteSentence($string)
-    {
-
-    }
-
-    public function getAttitude($string)
-    {
-
+        return $stopWords;
     }
 
     public function getStem($string)
     {
-
+        $stemmer = new LancasterStemmer();
+        return $stemmer->stem($string);
     }
 
-    public function isPositive($string)
+    public function removePunctuation($string)
     {
-
+        return trim(preg_replace("/[^0-9a-z]+/i", " ", $string));
     }
 
-    public function isNegative($string)
+    public function hasConfirmation($string)
     {
+        $result = false;
+        $words = $this->getWords($string);
 
+        foreach ($words as $word) {
+            if (in_array($word, $this->confirmationWords)) {
+                $result = true;
+            }
+        }
+
+        return $result;
     }
 
-    public function containsProfanity($string)
+    public function hasDenial($string)
     {
+        $result = false;
+        $words = $this->getWords($string);
 
+        foreach ($words as $word) {
+            if (in_array($word, $this->denialWords)) {
+                $result = true;
+            }
+        }
+
+        return $result;
+    }
+
+    public function hasUrl($string)
+    {
+        $result = false;
+        $words = $this->getWords($string);
+
+        foreach ($words as $word) {
+            if (preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i", $word)) {
+                $result = true;
+            }
+        }
+
+        return $result;
+    }
+
+    public function hasEmail($string)
+    {
+        $result = false;
+        $tokenizer = new GeneralTokenizer();
+        $words = $tokenizer->tokenize($string);
+
+        foreach ($words as $word) {
+            if (filter_var($word, FILTER_VALIDATE_EMAIL)) {
+                $result = true;
+            }
+        }
+
+        return $result;
+    }
+
+    public function isQuestion($string)
+    {
+        $probability = 0;
+
+        if (strpos($string, '?')) {
+            $probability += 1;
+        }
+
+        $words = $this->getWords($string);
+
+        foreach ($this->inquiryWords as $queryWord) {
+            if (!strncmp(strtolower($string), $queryWord, strlen($queryWord))) {
+                $probability += 1;
+            } elseif (stristr(strtolower($string), $queryWord)) {
+                $probability += 0.5;
+            }
+        }
+
+        if ($probability >= 2) {
+            return true;
+        }
+
+        return false;
     }
 }
