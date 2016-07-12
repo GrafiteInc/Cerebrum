@@ -11,6 +11,10 @@ use TextAnalysis\Tokenizers\WhitespaceTokenizer;
 
 trait Linguistics
 {
+    /**
+     * Inquiry Words
+     * @var array
+     */
     protected $inquiryWords = [
         'who',
         'what',
@@ -26,6 +30,10 @@ trait Linguistics
         'might',
     ];
 
+    /**
+     * Confirmation words
+     * @var array
+     */
     protected $confirmationWords = [
         'confirm',
         'can',
@@ -36,6 +44,10 @@ trait Linguistics
         'want',
     ];
 
+    /**
+     * Denial words
+     * @var array
+     */
     protected $denialWords = [
         'stop',
         'no',
@@ -61,6 +73,13 @@ trait Linguistics
         'not',
     ];
 
+    /**
+     * Get words in a string.
+     *
+     * @param  string $string
+     * @param  integer $minLength
+     * @return array
+     */
     public function getWords($string, $minLength = null)
     {
         $tokenizer = new WhitespaceTokenizer();
@@ -77,6 +96,13 @@ trait Linguistics
         return array_values($words);
     }
 
+    /**
+     * Get keywords
+     *
+     * @param  string  $string
+     * @param  integer $amount
+     * @return array
+     */
     public function getKeywords($string, $amount = 10)
     {
         $words = $this->getWords($string);
@@ -87,18 +113,36 @@ trait Linguistics
         return array_slice($keywords, 0, $amount);
     }
 
+    /**
+     * get hashtags.
+     *
+     * @param  string $string
+     * @return array
+     */
     public function getHashtags($string)
     {
         preg_match_all("/(#\w+)/", $string, $matches);
         return $matches[0];
     }
 
+    /**
+     * Get sentences
+     *
+     * @param  string $string
+     * @return array
+     */
     public function getSentences($string)
     {
         $tokenizer = new SentenceTokenizer();
         return $tokenizer->tokenize($string);
     }
 
+    /**
+     * Get unique words
+     *
+     * @param  string $string
+     * @return array
+     */
     public function getUniqueWords($string)
     {
         $words = $this->getWords($string);
@@ -108,6 +152,12 @@ trait Linguistics
         return array_unique(array_keys($words));
     }
 
+    /**
+     * Get words by complexity
+     *
+     * @param  string $string
+     * @return array
+     */
     public function getWordsByComplexity($string)
     {
         $words = $this->getWords($string);
@@ -122,6 +172,12 @@ trait Linguistics
         return $wordsByFrequency;
     }
 
+    /**
+     * Get stop words
+     *
+     * @param  string $string
+     * @return array
+     */
     public function getStopWords($string)
     {
         $words = $this->getWords($string);
@@ -137,17 +193,35 @@ trait Linguistics
         return $stopWords;
     }
 
+    /**
+     * Get a words stem
+     *
+     * @param  string $string
+     * @return string
+     */
     public function getStem($string)
     {
         $stemmer = new LancasterStemmer();
         return $stemmer->stem($string);
     }
 
+    /**
+     * Remove all punctuation
+     *
+     * @param  string $string
+     * @return string
+     */
     public function removePunctuation($string)
     {
         return trim(preg_replace("/[^0-9a-z]+/i", " ", $string));
     }
 
+    /**
+     * Has confirmation
+     *
+     * @param  string  $string
+     * @return boolean
+     */
     public function hasConfirmation($string)
     {
         $result = false;
@@ -162,6 +236,12 @@ trait Linguistics
         return $result;
     }
 
+    /**
+     * Has denial content
+     *
+     * @param  string  $string
+     * @return boolean
+     */
     public function hasDenial($string)
     {
         $result = false;
@@ -176,6 +256,12 @@ trait Linguistics
         return $result;
     }
 
+    /**
+     * Checks if string has a url
+     *
+     * @param  string  $string
+     * @return boolean
+     */
     public function hasUrl($string)
     {
         $result = false;
@@ -190,6 +276,12 @@ trait Linguistics
         return $result;
     }
 
+    /**
+     * Check if string has email
+     *
+     * @param  string  $string
+     * @return boolean
+     */
     public function hasEmail($string)
     {
         $result = false;
@@ -205,6 +297,12 @@ trait Linguistics
         return $result;
     }
 
+    /**
+     * Check if string is question
+     *
+     * @param  string  $string
+     * @return boolean
+     */
     public function isQuestion($string)
     {
         $probability = 0;

@@ -4,6 +4,7 @@
 
 * Memory provides magic caching abilities.
 * Linguistics provides a means of simple NLP.
+* Movement provides an easy ability to backup, clone, and transfer data.
 * Auditory provides some basic audio processing.
 * Occipital provides basic visual processing.
 
@@ -29,15 +30,15 @@ composer require yab/cerebrum
 
 ### Providers
 
+```php
+Yab\Cerebrum\CerebrumProvider::class
+```
+
 #### For Lumen:
 Add this to the `bootsrap/app.php` in the service providers array:
 
 #### For Laravel:
 Add this to the `config/app.php` in the service providers array:
-
-```php
-Yab\Cerebrum\CerebrumProvider::class
-```
 
 ## Milestones
 
@@ -53,7 +54,6 @@ Yab\Cerebrum\CerebrumProvider::class
 - [ ] Occipital
 
 ## Memory Example
-
 ```php
 use Yab\Cerebrum\Memory;
 
@@ -93,6 +93,33 @@ Regarding `$this->forgetful` if you do not set it, then `Memory` will parse your
 
 The `remember` function on the other hand, will collect a value and store it in the cache,
 returning the cached version. The `forget` with a parameter will find caches with similar values and clear your caches.
+
+## Linguistics Example
+```php
+use Yab\Cerebrum\Linguistics;
+
+class TaskService
+{
+    use Linguistics;
+
+    public function __construct(TaskRespository $taskRepository)
+    {
+        $this->repository = $taskRepository;
+    }
+
+    public function getKeyWords($id)
+    {
+        return $this->getKeyWords($this->repository->findById($id)->text);
+    }
+
+    public function search($searchString)
+    {
+        if ($this->isQuestion($seachString)) {
+            return $this->repository->search();
+        }
+    }
+}
+```
 
 ## License
 Memory is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
