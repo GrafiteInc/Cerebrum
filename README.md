@@ -6,6 +6,7 @@
 * Linguistics provides a means of simple NLP.
 * Auditory provides some basic audio processing.
 * Occipital provides basic visual processing.
+* Movement provides basic data transfer: cloning, backup, transfer etc.
 
 **Author(s):**
 * [Matt Lantz](https://github.com/mlantz) ([@mattylantz](http://twitter.com/mattylantz), matt at yabhq dot com)
@@ -44,6 +45,9 @@ Yab\Cerebrum\CerebrumProvider::class
 ### 1.0
 - [x] Memory
 - [ ] Linguistics
+- [ ] Movement
+
+### 2.0
 - [ ] Auditory
 - [ ] Occipital
 
