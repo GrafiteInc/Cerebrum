@@ -44,6 +44,11 @@ Yab\Cerebrum\CerebrumProvider::class
 ### 1.0
 - [x] Memory
 - [ ] Linguistics
+
+### 1.1
+- [ ] Movement
+
+### 2.0
 - [ ] Auditory
 - [ ] Occipital
 
