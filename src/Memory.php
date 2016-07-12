@@ -54,23 +54,6 @@ trait Memory
     }
 
     /**
-     * Forget something by key.
-     *
-     * @param  string $key
-     * @return bool
-     */
-    public function forgetByKey($key)
-    {
-        $result = false;
-
-        if (Cache::has($key)) {
-            $result = Cache::forget($key);
-        }
-
-        return $result;
-    }
-
-    /**
      * Remember the value
      *
      * @param  mixed $value
@@ -88,6 +71,23 @@ trait Memory
         }
 
         return $value;
+    }
+
+    /**
+     * Forget something by key.
+     *
+     * @param  string $key
+     * @return bool
+     */
+    private function forgetByKey($key)
+    {
+        $result = false;
+
+        if (Cache::has($key)) {
+            $result = Cache::forget($key);
+        }
+
+        return $result;
     }
 
     /**
