@@ -44,7 +44,7 @@ Add this to the `config/app.php` in the service providers array:
 
 ### 1.0
 - [x] Memory
-- [ ] Linguistics
+- [x] Linguistics
 
 ### 1.1
 - [ ] Movement
