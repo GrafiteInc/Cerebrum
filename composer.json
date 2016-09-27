@@ -9,12 +9,11 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9",
-        "illuminate/support": "^5.2",
-        "illuminate/container": "^5.2|^5.1",
+        "php": ">=5.6.4",
+        "illuminate/support": "^5.3|^5.2",
+        "illuminate/container": "^5.3|^5.2|^5.1",
         "mockery/mockery": "^0.9.4",
-        "nesbot/carbon": "^1.21",
-        "yooper/php-text-analysis": "^1.0"
+        "nesbot/carbon": "^1.21"
     },
     "autoload": {
         "psr-4": {

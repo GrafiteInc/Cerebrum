@@ -2,12 +2,12 @@
 
 namespace Yab\Cerebrum;
 
-use TextAnalysis\Analysis\FreqDist;
-use TextAnalysis\Filters\EnglishStopWordsFilter;
-use TextAnalysis\Stemmers\LancasterStemmer;
-use TextAnalysis\Tokenizers\GeneralTokenizer;
-use TextAnalysis\Tokenizers\SentenceTokenizer;
-use TextAnalysis\Tokenizers\WhitespaceTokenizer;
+use Yab\Cerebrum\Analysis\FrequencyAnalysis;
+use Yab\Cerebrum\Filters\StopWordsFilter;
+use Yab\Cerebrum\Stemmers\LancasterStemmer;
+use Yab\Cerebrum\Analysis\Tokenizers\General;
+use Yab\Cerebrum\Analysis\Tokenizers\Sentence;
+use Yab\Cerebrum\Analysis\Tokenizers\Whitespace;
 
 trait Linguistics
 {
@@ -82,7 +82,7 @@ trait Linguistics
      */
     public function getWords($string, $minLength = null)
     {
-        $tokenizer = new WhitespaceTokenizer();
+        $tokenizer = new Whitespace();
         $words = $tokenizer->tokenize($string);
 
         if (! is_null($minLength)) {
@@ -106,7 +106,8 @@ trait Linguistics
     public function getKeywords($string, $amount = 10)
     {
         $words = $this->getWords($string);
-        $analysis = new FreqDist($words);
+
+        $analysis = new FrequencyAnalysis($words);
 
         $keywords = $analysis->getKeyValuesByFrequency();
 
@@ -133,7 +134,7 @@ trait Linguistics
      */
     public function getSentences($string)
     {
-        $tokenizer = new SentenceTokenizer();
+        $tokenizer = new Sentence();
         return $tokenizer->tokenize($string);
     }
 
@@ -146,7 +147,7 @@ trait Linguistics
     public function getUniqueWords($string)
     {
         $words = $this->getWords($string);
-        $analysis = new FreqDist($words);
+        $analysis = new FrequencyAnalysis($words);
         $words = $analysis->getKeyValuesByFrequency();
 
         return array_unique(array_keys($words));
@@ -161,7 +162,7 @@ trait Linguistics
     public function getWordsByComplexity($string)
     {
         $words = $this->getWords($string);
-        $analysis = new FreqDist($words);
+        $analysis = new FrequencyAnalysis($words);
         $sortedWords = $analysis->getKeyValuesByFrequency();
         $wordsByFrequency = array_unique(array_keys($sortedWords));
 
@@ -178,10 +179,10 @@ trait Linguistics
      * @param  string $string
      * @return array
      */
-    public function getStopWords($string)
+    public function getStopWords($string, $language = 'english')
     {
         $words = $this->getWords($string);
-        $filter = new EnglishStopWordsFilter();
+        $filter = new StopWordsFilter($language);
         $stopWords = [];
 
         foreach ($words as $word) {
@@ -201,8 +202,8 @@ trait Linguistics
      */
     public function getStem($string)
     {
-        $stemmer = new LancasterStemmer();
-        return $stemmer->stem($string);
+        // $stemmer = new LancasterStemmer();
+        // return $stemmer->stem($string);
     }
 
     /**
@@ -285,7 +286,7 @@ trait Linguistics
     public function hasEmail($string)
     {
         $result = false;
-        $tokenizer = new GeneralTokenizer();
+        $tokenizer = new General();
         $words = $tokenizer->tokenize($string);
 
         foreach ($words as $word) {
