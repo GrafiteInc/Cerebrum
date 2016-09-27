@@ -67,6 +67,11 @@ trait Memory
             $value = Cache::get($key);
         } else {
             $expiresAt = Carbon::now()->addMinutes($this->memoryDuration);
+
+            if (is_callable($value)) {
+                $value = $value();
+            }
+
             Cache::put($key, $value, $expiresAt);
         }
 
