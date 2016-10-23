@@ -4,9 +4,8 @@
 
 * Memory provides magic caching abilities.
 * Linguistics provides a means of simple NLP.
-* Movement provides an easy ability to backup, clone, and transfer data.
-* Auditory provides some basic audio processing.
-* Occipital provides basic visual processing.
+* Perception collects data into a sets of groups.
+* Prediction is first trained and then can locate similar entities.
 
 **Author(s):**
 * [Matt Lantz](https://github.com/mlantz) ([@mattylantz](http://twitter.com/mattylantz), matt at yabhq dot com)
@@ -46,12 +45,9 @@ Add this to the `config/app.php` in the service providers array:
 - [x] Memory
 - [x] Linguistics
 
-### 1.1
-- [ ] Movement
-
 ### 2.0
-- [ ] Auditory
-- [ ] Occipital
+- [ ] Perception
+- [ ] Prediction
 
 ## Memory Example
 ```php
