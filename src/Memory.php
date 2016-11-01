@@ -84,7 +84,7 @@ trait Memory
      * @param  string $key
      * @return bool
      */
-    private function forgetByKey($key)
+    protected function forgetByKey($key)
     {
         $result = false;
 
@@ -100,7 +100,7 @@ trait Memory
      *
      * @return string
      */
-    private function getRememberKey()
+    protected function getRememberKey()
     {
         $backtrace = debug_backtrace(4)[2];
         $args = implode('_', $backtrace['args']);

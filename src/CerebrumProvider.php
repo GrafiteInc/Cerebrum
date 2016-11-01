@@ -13,6 +13,6 @@ class CerebrumProvider extends ServiceProvider
      */
     public function register()
     {
-
+        // maybe something, one day
     }
 }
