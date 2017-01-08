@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 ----
 
+## [v1.1.0] - 2017-01-08
+
+### Added
+- Basic perception with some machine learning methods
+
+### Changed
+- General code clean up
+
 ## [v1.0.2] - 2016-09-27
 
 ### Changed
