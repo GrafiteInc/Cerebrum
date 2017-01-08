@@ -5,8 +5,8 @@ use Illuminate\Support\Facades\Facade;
 use Yab\Cerebrum\Memory;
 
 /**
-* Test Class
-*/
+ * Test Class.
+ */
 class TestClass
 {
     use Memory;
@@ -16,7 +16,7 @@ class TestClass
         $this->memoryDuration = 60;
         $this->forgetful = [
             'all',
-            'findById'
+            'findById',
         ];
     }
 
@@ -73,6 +73,7 @@ class MemoryTest extends PHPUnit_Framework_TestCase
     {
         $test = $this->testClass->remember(['test']);
         $this->assertEquals($test, ['test']);
+        $this->assertTrue(is_array($test));
     }
 
     public function testForget()

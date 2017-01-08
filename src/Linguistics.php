@@ -4,6 +4,7 @@ namespace Yab\Cerebrum;
 
 use Yab\Cerebrum\Analysis\FrequencyAnalysis;
 use Yab\Cerebrum\Filters\StopWordsFilter;
+use Yab\Cerebrum\Filters\ActionWordsFilter;
 use Yab\Cerebrum\Stemmers\LancasterStemmer;
 use Yab\Cerebrum\Analysis\Tokenizers\General;
 use Yab\Cerebrum\Analysis\Tokenizers\Sentence;
@@ -12,7 +13,8 @@ use Yab\Cerebrum\Analysis\Tokenizers\Whitespace;
 trait Linguistics
 {
     /**
-     * Inquiry Words
+     * Inquiry Words.
+     *
      * @var array
      */
     protected $inquiryWords = [
@@ -31,7 +33,8 @@ trait Linguistics
     ];
 
     /**
-     * Confirmation words
+     * Confirmation words.
+     *
      * @var array
      */
     protected $confirmationWords = [
@@ -45,7 +48,8 @@ trait Linguistics
     ];
 
     /**
-     * Denial words
+     * Denial words.
+     *
      * @var array
      */
     protected $denialWords = [
@@ -76,8 +80,9 @@ trait Linguistics
     /**
      * Get words in a string.
      *
-     * @param  string $string
-     * @param  integer $minLength
+     * @param string $string
+     * @param int    $minLength
+     *
      * @return array
      */
     public function getWords($string, $minLength = null)
@@ -85,7 +90,7 @@ trait Linguistics
         $tokenizer = new Whitespace();
         $words = $tokenizer->tokenize($string);
 
-        if (! is_null($minLength)) {
+        if (!is_null($minLength)) {
             foreach ($words as $key => $word) {
                 if (strlen($word) <= $minLength) {
                     unset($words[$key]);
@@ -97,10 +102,35 @@ trait Linguistics
     }
 
     /**
-     * Get keywords
+     * Get Action words.
      *
-     * @param  string  $string
-     * @param  integer $amount
+     * @param string $string
+     * @param string $language
+     *
+     * @return array
+     */
+    public function getActionWords($string, $language = 'english')
+    {
+        $words = $this->getWords($string);
+        $filter = new ActionWordsFilter($language);
+        $actionWords = [];
+
+        foreach ($words as $word) {
+            $word = $this->removePunctuation($word);
+            if (!is_null($filter->filter($word))) {
+                $actionWords[] = $word;
+            }
+        }
+
+        return $actionWords;
+    }
+
+    /**
+     * Get keywords.
+     *
+     * @param string $string
+     * @param int    $amount
+     *
      * @return array
      */
     public function getKeywords($string, $amount = 10)
@@ -117,31 +147,36 @@ trait Linguistics
     /**
      * get hashtags.
      *
-     * @param  string $string
+     * @param string $string
+     *
      * @return array
      */
     public function getHashtags($string)
     {
         preg_match_all("/(#\w+)/", $string, $matches);
+
         return $matches[0];
     }
 
     /**
-     * Get sentences
+     * Get sentences.
      *
-     * @param  string $string
+     * @param string $string
+     *
      * @return array
      */
     public function getSentences($string)
     {
         $tokenizer = new Sentence();
+
         return $tokenizer->tokenize($string);
     }
 
     /**
-     * Get unique words
+     * Get unique words.
      *
-     * @param  string $string
+     * @param string $string
+     *
      * @return array
      */
     public function getUniqueWords($string)
@@ -154,9 +189,10 @@ trait Linguistics
     }
 
     /**
-     * Get words by complexity
+     * Get words by complexity.
      *
-     * @param  string $string
+     * @param string $string
+     *
      * @return array
      */
     public function getWordsByComplexity($string)
@@ -174,9 +210,10 @@ trait Linguistics
     }
 
     /**
-     * Get stop words
+     * Get stop words.
      *
-     * @param  string $string
+     * @param string $string
+     *
      * @return array
      */
     public function getStopWords($string, $language = 'english')
@@ -186,7 +223,7 @@ trait Linguistics
         $stopWords = [];
 
         foreach ($words as $word) {
-            if ($filter->transform($word)) {
+            if (!is_null($filter->filter($word))) {
                 $stopWords[] = $word;
             }
         }
@@ -195,9 +232,10 @@ trait Linguistics
     }
 
     /**
-     * Get a words stem
+     * Get a words stem.
      *
-     * @param  string $string
+     * @param string $string
+     *
      * @return string
      */
     public function getStem($string)
@@ -207,21 +245,23 @@ trait Linguistics
     }
 
     /**
-     * Remove all punctuation
+     * Remove all punctuation.
      *
-     * @param  string $string
+     * @param string $string
+     *
      * @return string
      */
     public function removePunctuation($string)
     {
-        return trim(preg_replace("/[^0-9a-z]+/i", " ", $string));
+        return trim(preg_replace('/[^0-9a-z]+/i', ' ', $string));
     }
 
     /**
-     * Has confirmation
+     * Has confirmation.
      *
-     * @param  string  $string
-     * @return boolean
+     * @param string $string
+     *
+     * @return bool
      */
     public function hasConfirmation($string)
     {
@@ -238,10 +278,11 @@ trait Linguistics
     }
 
     /**
-     * Has denial content
+     * Has denial content.
      *
-     * @param  string  $string
-     * @return boolean
+     * @param string $string
+     *
+     * @return bool
      */
     public function hasDenial($string)
     {
@@ -258,10 +299,11 @@ trait Linguistics
     }
 
     /**
-     * Checks if string has a url
+     * Checks if string has a url.
      *
-     * @param  string  $string
-     * @return boolean
+     * @param string $string
+     *
+     * @return bool
      */
     public function hasUrl($string)
     {
@@ -278,10 +320,11 @@ trait Linguistics
     }
 
     /**
-     * Check if string has email
+     * Check if string has email.
      *
-     * @param  string  $string
-     * @return boolean
+     * @param string $string
+     *
+     * @return bool
      */
     public function hasEmail($string)
     {
@@ -299,10 +342,11 @@ trait Linguistics
     }
 
     /**
-     * Check if string is question
+     * Check if string is question.
      *
-     * @param  string  $string
-     * @return boolean
+     * @param string $string
+     *
+     * @return bool
      */
     public function isQuestion($string)
     {

@@ -4,8 +4,7 @@
 
 * Memory provides magic caching abilities.
 * Linguistics provides a means of simple NLP.
-* Perception collects data into a sets of groups.
-* Prediction is first trained and then can locate similar entities.
+* Perception helping you discover data you didn't even know you had
 
 **Author(s):**
 * [Matt Lantz](https://github.com/mlantz) ([@mattylantz](http://twitter.com/mattylantz), matt at yabhq dot com)
@@ -45,9 +44,8 @@ Add this to the `config/app.php` in the service providers array:
 - [x] Memory
 - [x] Linguistics
 
-### 2.0
-- [ ] Perception
-- [ ] Prediction
+### 1.1
+- [x] Perception
 
 ## Memory Example
 ```php
@@ -75,6 +73,11 @@ class TaskService
     public function findById($id)
     {
         return $this->remember($this->repository->findById($id));
+    }
+
+    public function findByIdWithLongerCache($id)
+    {
+        return $this->remember($this->repository->findById($id), 1440);
     }
 
     public function update($id, $data)
@@ -117,8 +120,45 @@ class TaskService
 }
 ```
 
+## Perception Examples
+```php
+use Yab\Cerebrum\Perception;
+
+class TaskService
+{
+    use Perception;
+
+    public function __construct(TaskRespository $taskRepository)
+    {
+        $this->repository = $taskRepository;
+    }
+
+    public function getNormalizedData()
+    {
+        $scores = $this->repository->pluck('score')->all();
+        return $this->normalize($scores);
+    }
+
+    public function predictDay()
+    {
+        $records = $this->repository->pluck('day', 'sleep_hours', 'active_hours')->all();
+        // $records = ['monday' => [6, 1], 'wednesday' => [4, 0]]
+        $result = $this->supervised()->samples($records)->predict([5,2]);
+        // $result = monday
+    }
+
+    public function getExpectingDay()
+    {
+        // This is a very simple frequency tool
+        $records = $this->repository->pluck('day')->all();
+        // $records = ['monday', 'tuesday', 'wednesday', 'tuesday', 'friday', 'monday', 'tuesday']
+        $result = $this->ai()->samples($records)->expecting();
+        // $result = tuesday
+    }
+}
+
 ## License
-Memory is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+Cerebrum is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
 ### Bug Reporting and Feature Requests
 Please add as many details as possible regarding submission of issues and feature requests

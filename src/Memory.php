@@ -8,22 +8,22 @@ use Illuminate\Support\Facades\Cache;
 trait Memory
 {
     /**
-     * Memory duration
+     * Memory duration.
      *
-     * @var integer
+     * @var int
      */
     protected $memoryDuration = 15;
 
     /**
      * Methods that can be forgetten
-     * when the forget method is called
+     * when the forget method is called.
      *
      * @var array
      */
     protected $forgetful = [];
 
     /**
-     * Forget the cached value
+     * Forget the cached value.
      *
      * @param array $args
      *
@@ -31,7 +31,7 @@ trait Memory
      */
     public function forget($args = [])
     {
-        if (! empty($args)) {
+        if (!empty($args)) {
             if (is_array($args)) {
                 $args = implode('_', $args);
             }
@@ -54,19 +54,25 @@ trait Memory
     }
 
     /**
-     * Remember the value
+     * Remember the value.
      *
-     * @param  mixed $value
+     * @param mixed $value
+     * @param int   $memoryDuration
+     *
      * @return mixed
      */
-    public function remember($value)
+    public function remember($value, $memoryDuration = null)
     {
+        if (is_null($memoryDuration)) {
+            $memoryDuration = $this->memoryDuration;
+        }
+
         $key = $this->getRememberKey();
 
         if (Cache::has($key)) {
             $value = Cache::get($key);
         } else {
-            $expiresAt = Carbon::now()->addMinutes($this->memoryDuration);
+            $expiresAt = Carbon::now()->addMinutes($memoryDuration);
 
             if (is_callable($value)) {
                 $value = $value();
@@ -81,7 +87,8 @@ trait Memory
     /**
      * Forget something by key.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return bool
      */
     protected function forgetByKey($key)
@@ -96,7 +103,7 @@ trait Memory
     }
 
     /**
-     * get the cache key
+     * get the cache key.
      *
      * @return string
      */

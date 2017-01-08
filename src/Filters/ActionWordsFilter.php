@@ -2,16 +2,16 @@
 
 namespace Yab\Cerebrum\Filters;
 
-class StopWordsFilter
+class ActionWordsFilter
 {
     protected $language;
 
     protected $version;
 
-    public $stopWords = [];
+    public $actionWords = [];
 
     /**
-     * Populate the stopWords array.
+     * Populate the actionWords array.
      *
      * @param string $language
      */
@@ -20,23 +20,23 @@ class StopWordsFilter
         $this->language = $language;
         $this->version = 1;
 
-        $fileName = 'stop-words_'.$this->language.'_'.$this->version.'.txt';
+        $fileName = 'action-words_'.$this->language.'_'.$this->version.'.txt';
 
         $path = __DIR__.'/../../data/'.basename($fileName);
 
         if (file_exists($path)) {
-            $this->stopWords = array_map('trim', file($path));
+            $this->actionWords = array_map('trim', file($path));
         }
     }
 
     /**
-     * Check if the stop word is in the list.
+     * Check if the action word is in the list.
      *
      * @param string $word
      */
     public function filter($word)
     {
-        if (in_array($word, $this->stopWords)) {
+        if (in_array(strtolower($word), $this->actionWords)) {
             return $word;
         }
 
