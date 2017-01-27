@@ -11,7 +11,6 @@
     "require": {
         "php": ">=5.6.4",
         "illuminate/support": "5.*",
-        "illuminate/container": "5.*",
         "mockery/mockery": "^0.9.4",
         "nesbot/carbon": "^1.21"
     },
