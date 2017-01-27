@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 ----
 
+## [v1.1.2] - 2017-01-27
+
+### Changed
+- Updated composer for easier maintenance
+
 ## [v1.1.1] - 2017-01-24
 
 ### Changed
