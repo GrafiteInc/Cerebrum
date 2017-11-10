@@ -1,8 +1,9 @@
 <?php
 
+use Orchestra\Testbench\TestCase;
 use Yab\Cerebrum\Perception;
 
-class PerceptionTest extends PHPUnit_Framework_TestCase
+class PerceptionTest extends TestCase
 {
     use Perception;
 

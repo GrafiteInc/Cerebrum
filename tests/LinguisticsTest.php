@@ -1,8 +1,9 @@
 <?php
 
+use Orchestra\Testbench\TestCase;
 use Yab\Cerebrum\Linguistics;
 
-class LinguisticsTest extends PHPUnit_Framework_TestCase
+class LinguisticsTest extends TestCase
 {
     use Linguistics;
 

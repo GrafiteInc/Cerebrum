@@ -11,8 +11,12 @@
     "require": {
         "php": ">=5.6.4",
         "illuminate/support": "5.*",
-        "mockery/mockery": "^0.9.4",
         "nesbot/carbon": "^1.21"
+    },
+    "require-dev": {
+        "mockery/mockery": "^0.9.4",
+        "phpunit/phpunit": "^6.0",
+        "orchestra/testbench": "^3.4"
     },
     "autoload": {
         "psr-4": {

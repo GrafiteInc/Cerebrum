@@ -3,6 +3,7 @@
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Facade;
 use Yab\Cerebrum\Memory;
+use Orchestra\Testbench\TestCase;
 
 /**
  * Test Class.
@@ -41,7 +42,7 @@ class TestClass
     }
 }
 
-class MemoryTest extends PHPUnit_Framework_TestCase
+class MemoryTest extends TestCase
 {
     public function setUp()
     {

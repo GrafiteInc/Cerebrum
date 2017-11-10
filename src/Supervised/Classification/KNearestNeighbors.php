@@ -20,8 +20,7 @@ class KNearestNeighbors
         return $this->predictions;
     }
 
-
-/**
+    /**
      * @param array $sample
      *
      * @return mixed
@@ -37,6 +36,7 @@ class KNearestNeighbors
         reset($predictions);
         return key($predictions);
     }
+
     /**
      * @param array $sample
      *
@@ -53,14 +53,6 @@ class KNearestNeighbors
         asort($distances);
         return array_slice($distances, 0, $this->k, true);
     }
-
-
-
-
-
-
-
-
 
     public function predict($testable)
     {

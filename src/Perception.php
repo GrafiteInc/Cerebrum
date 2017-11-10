@@ -16,15 +16,14 @@ trait Perception
         'NaiveBayes',
     ];
 
-    public function __construct()
+    public function setNormalizer()
     {
-        $this->classifier = new NaiveBayes();
         $this->normalizer = new Normalizer();
     }
 
     public function setClassifier($algorithm)
     {
-        if (!in_array($this->classifiers)) {
+        if (!in_array($algorithm, $this->classifiers)) {
             throw new Exception('Must be one of: '.implode($this->classifiers), 1);
         }
 
@@ -33,11 +32,9 @@ trait Perception
         $this->classifier = new $class();
     }
 
-    public function supervised($algorithm = null)
+    public function supervised($algorithm = 'NaiveBayes')
     {
-        if (!is_null($algorithm)) {
-            $this->setClassifier($algorithm);
-        }
+        $this->setClassifier($algorithm);
 
         return $this->classifier;
     }
@@ -49,6 +46,8 @@ trait Perception
 
     public function normalize($data)
     {
+        $this->setNormalizer();
+
         $normalizedData = collect();
 
         list($min, $max) = $this->normalizer->getMinMax($data);
